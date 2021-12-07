@@ -1,2 +1,15 @@
 # Data sources
 
+## NYC Crime Data
+
+This data set is collected from NYC OpenData
+
+*Collected by:* Zhisen Cai
+
+**Link:** https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Historic/qgea-i56i
+
+## NYC Hate Crime Data
+
+**Link:** https://data.cityofnewyork.us/Public-Safety/NYPD-Hate-Crimes/bqiq-cu78
+
+*Collected by:* Rona Xu
