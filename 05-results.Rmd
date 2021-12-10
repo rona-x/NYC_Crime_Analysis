@@ -1,1 +1,32 @@
 # Results
+```{r setup}
+library(dplyr)
+library(reader)
+library(ggplot2)
+library(viridis)
+library(tidyverse)
+```
+
+```{r}
+dat <- read.csv("C:/Users/xrl18/NYC_Crime_Analysis/data/Hate_Crimes.csv")
+
+names(dat) <- c("Year","Month","County","level","Offense","Bias")
+
+
+dh3 <- dat %>% group_by(County,Bias) %>% 
+               summarize(Total = n()) %>%
+               pivot_wider(names_from = Bias, values_from = Total)
+
+dat$Month <- as.factor(dat$Month)
+dh2 <- dat %>% group_by(Year,Month,level) %>% summarize(Total = n())
+
+ph2 <- ggplot(dh2, aes(x=Month , y= Total)) +
+facet_grid(level ~Year)+
+geom_bar(stat = 'identity')+
+theme_classic()+
+scale_color_viridis(discrete = TRUE, option = "D")+
+scale_fill_viridis(discrete = TRUE)+
+ggtitle('Total Hate Crime in Different Month')+
+theme(plot.title = element_text(hjust = 0.5))
+ph2
+```
