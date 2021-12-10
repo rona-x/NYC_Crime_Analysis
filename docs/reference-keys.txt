@@ -1,6 +1,10 @@
 introduction
 data-sources
+nyc-crime-data
+nyc-hate-crime-data
 data-transformation
+nyc-crime-data-1
+nyc-hate-crime-data-1
 missing-values
 results
 interactive-component

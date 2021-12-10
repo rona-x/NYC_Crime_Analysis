@@ -24,7 +24,7 @@
 <meta name="author" content="Zhisen Cai &amp; Rona Xu" />
 
 
-<meta name="date" content="2021-12-06" />
+<meta name="date" content="2021-12-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -74,8 +74,16 @@
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
-<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-sources.html"><a href="data-sources.html#nyc-crime-data"><i class="fa fa-check"></i><b>2.1</b> NYC Crime Data</a></li>
+<li class="chapter" data-level="2.2" data-path="data-sources.html"><a href="data-sources.html#nyc-hate-crime-data"><i class="fa fa-check"></i><b>2.2</b> NYC Hate Crime Data</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#nyc-crime-data-1"><i class="fa fa-check"></i><b>3.1</b> NYC Crime Data</a></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#nyc-hate-crime-data-1"><i class="fa fa-check"></i><b>3.2</b> NYC Hate Crime Data</a></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
@@ -101,7 +109,16 @@
             <section class="normal" id="section-">
 <div id="data-transformation" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
+<div id="nyc-crime-data-1" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> NYC Crime Data</h2>
+<p>To begin with, we selected the data from Year 2020 for the further analysis. Then, we decided to remove irrelevant variables. Since this project is more focus on the victim’s perspective, we took out observations associated with the suspect’s information. What is more, we eliminated police abbreviations and codes to make this report reader-friendly. Finally, we converted the exact time of crime occurrence from the HH:MM:SS format to an interval value defining a period of time in hours, which aids in modeling.</p>
+<p>This cleaning process reduced the size of the original data set significantly and made analysis more efficient.</p>
+</div>
+<div id="nyc-hate-crime-data-1" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> NYC Hate Crime Data</h2>
+<p>For this relatively neat and small data set, we only took out a few features, including police terminology and arrest ID.</p>
 
+</div>
 </div>
             </section>
 
@@ -140,7 +157,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/edit/main/03-cleaning.Rmd",
+"link": "https://github.com/rona-x/NYC_Crime_Analysis/edit/main/03-cleaning.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -148,7 +165,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/blob/main/03-cleaning.Rmd",
+"link": "https://github.com/rona-x/NYC_Crime_Analysis/blob/main/03-cleaning.Rmd",
 "text": null
 },
 "download": null,

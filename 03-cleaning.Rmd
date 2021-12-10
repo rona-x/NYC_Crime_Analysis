@@ -1,1 +1,13 @@
 # Data transformation
+
+
+## NYC Crime Data
+
+To begin with, we selected the data from Year 2020 for the further analysis. Then, we decided to remove irrelevant variables. Since this project is more focus on the victim's perspective, we took out observations associated with the suspect's information. What is more, we eliminated police abbreviations and codes to make this report reader-friendly. Finally, we converted the exact time of crime occurrence from the HH:MM:SS format to an interval value defining a period of time in hours, which aids in modeling. 
+
+This cleaning process reduced the size of the original data set significantly and made analysis more efficient.
+
+
+## NYC Hate Crime Data
+
+For this relatively neat and small data set, we only took out a few features, including police terminology and arrest ID. 
