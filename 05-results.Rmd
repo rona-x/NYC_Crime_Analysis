@@ -19,8 +19,10 @@ dh3 <- dat %>% group_by(County,Bias) %>%
 
 dat$Month <- as.factor(dat$Month)
 dh2 <- dat %>% group_by(Year,Month,level) %>% summarize(Total = n())
+```
 
-ph2 <- ggplot(dh2, aes(x=Month , y= Total)) +
+```{r}
+ggplot(dh2, aes(x=Month , y= Total)) +
 facet_grid(level ~Year)+
 geom_bar(stat = 'identity')+
 theme_classic()+
@@ -28,5 +30,5 @@ scale_color_viridis(discrete = TRUE, option = "D")+
 scale_fill_viridis(discrete = TRUE)+
 ggtitle('Total Hate Crime in Different Month')+
 theme(plot.title = element_text(hjust = 0.5))
-ph2
+
 ```
