@@ -1,14 +1,113 @@
 # Results
 ```{r setup}
 library(dplyr)
-library(reader)
+library(readr)
 library(ggplot2)
 library(viridis)
 library(tidyverse)
+library(GGally)
+library(parcoords)
+library(Lock5withR)
+library(vcd)
+library(leaflet) 
+library(leaflet.extras)
 ```
 
+```{r warning=FALSE, eval=FALSE}
+d5 <- NYPD_CRIME_FINAL <- read_csv("data/NYPD_CRIME_FINAL.csv")
+```
+```{r warning=FALSE, eval=FALSE}
+dv36 <- d5 %>% group_by(County,TimeRange) %>% 
+               summarize(Total = n()) %>%
+               pivot_wider(names_from = TimeRange, values_from = Total)
+ggparcoord(dv36,columns = 2:25,groupColumn = "County",scale = "globalminmax")+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
+  theme(legend.position="bottom")+
+    labs(x = "TimeRange",y= " Count")
+```
+crime between 5am and 6 am - Brooklyn has highest number of crime between 17 pm and 18pm. Brooklyn has largest number of crime in all time range. - Manhattan has highest number of crime between 16 pm and 17 pm. - Bronx has highest number of crime between 18 pm and 19 pm. - Queens has highest number of crime between 18 pm and 19 pm. - Staten Island has highest number of crime between 12pm and 13 pm. Staten Island has lowest number of crime in all time range.
+
+```{r warning=FALSE, eval=FALSE}
+ggplot(d5, aes(x= TimeRange)) +
+geom_bar(stat = 'count')+
+facet_grid(County ~level)+
+theme_classic()+
+scale_color_viridis(discrete = TRUE, option = "D")+
+scale_fill_viridis(discrete = TRUE)+
+ggtitle('Total Crime in Each hour')+
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
+theme(legend.position="none")
+```
+different county except Staten Island. We can see that misdemeanor level of crimes is the largest among three levels, felony,misdemeanor,violation.
+
+
+```{r warning=FALSE, eval=FALSE}
+dv13 <- d5 %>%
+  select(County,level) %>%
+  group_by(County,level) %>%
+  summarise(Freq=n()) %>%
+  mutate(level=fct_relevel(level, "VIOLATION","MISDEMEANOR","FELONY")) %>%
+  filter(County != 'STATEN ISLAND')
+dv13$County = factor(dv13$County, labels = c('BROOKLYN','MANHATTAN','BRONX','QUEENS'))
+mosaic(level ~ County, direction=c("v","h"),dv13)
+```
+
+Island is too small, we focus on Brooklyn,Manhattan, Bronx and Queens. In Brooklyn, Manhattan, Bronx and Queens,Brooklyn have the largest number of crimes in all level. Manhattan have lowest violation crimes. Bronx seems to have similar distribution of crimes as that of queens
+
+```{r warning=FALSE, eval=FALSE}
+dv19 <- d5 %>% group_by(Location,level) %>% summarize(Total = n()) %>% arrange(desc(Total))
+dv20 <- d5 %>% group_by(Location) %>% summarize(TT = n())
+dv21 <- left_join(dv19,dv20,by = 'Location')
+ggplot(dv21, aes(y= reorder(Location,TT),Total, fill = level))+
+geom_bar(stat = "identity") + theme_minimal() +
+labs(x = "Count",y= " Location",title = "Counting crimes in different level at different location")+
+theme(plot.title = element_text(hjust = 0.5))+
+theme_classic()+
+scale_color_viridis(discrete = TRUE, option = "D")+
+scale_fill_viridis(discrete = TRUE)
+```
+
+residence Apt. House. 家庭暴力？ violation residence house很高？ street 上的 misdemeanor felony 犯罪最高
+
+```{r warning=FALSE, eval=FALSE}
+dv22 <- d5 %>% filter(VIC_Sex == 'F' | VIC_Sex == "M")%>% group_by(Offense,VIC_Sex) %>% summarize(Total = n()) %>% arrange(desc(Total))
+dv23 <- d5 %>% filter(VIC_Sex == 'F' | VIC_Sex == "M") %>% group_by(Offense) %>% summarize(TT = n())
+dv24 <- left_join(dv22,dv23,by = 'Offense')
+ggplot(dv24, aes(y= reorder(Offense,TT),Total, fill = VIC_Sex))+
+geom_bar(stat = "identity") + theme_minimal() +
+labs(x = "Count",y= " Offense",title = "Counting crimes on different sex in different crime")+
+theme(plot.title = element_text(hjust = 0.5))+
+theme_classic()+
+scale_color_viridis(discrete = TRUE, option = "D")+
+scale_fill_viridis(discrete = TRUE)
+```
+是top3 crime 女性遇到 harrassment2 和 assault占比更高，男性遇到的petit larceny 占比更高，男性防护意识更弱？ 男性robbery victim 更高 什么鬼
+
 ```{r}
-dat <- read.csv("C:/Users/xrl18/NYC_Crime_Analysis/data/Hate_Crimes.csv")
+d5 %>% count(Location , Offense) %>% 
+filter(Offense != 'Others' & Location != 'Others') %>%
+ggplot(mapping = aes(x = Location , y = Offense)) +
+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
+geom_tile(mapping = aes(fill = n))+
+scale_fill_gradient(low = "#DEEBF7", high = "#08306B")
+```
+Mischief related of 最高，assault占比也不少， residence-apt . house 中 harrassment最高，assault 占比也不少。
+
+```{r}
+dm4 <- d5[d5$Location=='STREET',]
+options(repr.plot.width=8, repr.plot.height=8)
+m4 <- dm4 %>% leaflet() %>% addTiles() %>% 
+  addProviderTiles(providers$CartoDB.DarkMatter) %>% 
+  addWebGLHeatmap(lng=dm4$Longitude, lat=dm4$Latitude, size = 250)
+m4
+```
+
+所有街道都不安全？走路不要戴耳机，眼观六路，耳听八方？
+
+
+```{r}
+dat <- read_csv("data/Hate_Crimes.csv")
 
 names(dat) <- c("Year","Month","County","level","Offense","Bias")
 
@@ -18,6 +117,12 @@ dh3 <- dat %>% group_by(County,Bias) %>%
                pivot_wider(names_from = Bias, values_from = Total)
 
 dat$Month <- as.factor(dat$Month)
+dat$County <- as.factor(dat$County)
+dat$level <- as.factor(dat$level)
+dat$Offense<- as.factor(dat$Offense)
+dat$Bias <- as.factor(dat$Bias)
+
+
 dh2 <- dat %>% group_by(Year,Month,level) %>% summarize(Total = n())
 ```
 
@@ -32,3 +137,33 @@ ggtitle('Total Hate Crime in Different Month')+
 theme(plot.title = element_text(hjust = 0.5))
 
 ```
+
+misdemeano ， 2021 hate crime更严重，尤其四五月份，19 年到20年下降，20到21年疯狂上升
+
+
+```{r warning=FALSE, eval=FALSE}
+dh3 <- dat %>% group_by(County,Bias) %>% 
+               summarize(Total = n()) %>%
+               pivot_wider(names_from = Bias, values_from = Total)
+dh3[is.na(dh3)] = 0
+
+ggparcoord(dh3,columns = 2:24,groupColumn = "County",scale = "globalminmax")+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
+  theme(legend.position="bottom")+
+    labs(x = "Bias",y= " Count")
+
+```
+jewish，其次是anti asian， new york 中 anti asian最高，kings 中anti jewish 最高，其次才是anti asian
+
+```{r warning=FALSE, eval=FALSE}
+dh4 <- dat %>% group_by(Offense,Bias) %>% 
+               summarize(Total = n()) %>%
+               filter(Total > 15) %>%
+               pivot_wider(names_from = Offense, values_from = Total)
+dh4[is.na(dh4)] = 0
+parcoords(data =  dh4, rownames = FALSE, brushMode = "1d-axes-multi", reorderable = TRUE,queue = TRUE,color = list(colorBy="Region"), withD3 = TRUE)
+```
+```{r}
+dh4 
+```
+Religion/Religious 是最大原因被hate的，其中anti jewish 是因此最被hate的， 其次因为race 和 color 被hate 的人也很多 因为race 和color 被hate最多的是 asian 和 black。第三多的是sexual orientation，被恨最多的是ANTI-MALE HOMOSEXUAL (GAY)
