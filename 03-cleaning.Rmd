@@ -34,4 +34,5 @@ This cleaning process reduced the size of the original data set significantly an
 ## NYC Hate Crime Data
 
 For this relatively neat and small data set, we only took out a few features, including police terminology and arrest ID. We have columns "Full Complaint ID" ,"Complaint Year Number", "Month Number","Record Create Date" ,"Complaint Precinct Code", "Patrol Borough Name","County"  ,"Law Code Category Description", "Offense Description" , "PD Code Description" "Bias Motive Description", "Offense Category" ,"Arrest Date" and "Arrest Id". We only pick Complaint Year Number,Month Number,County,Law Code Category Description,Offense Category and Bias Motive Description.
-We change the column names into "Year","Month","County","level","Offense"and "Bias".
+
+We change the column names into "Year","Month","County","level","Offense"and "Bias". Besides, we change all the categorical date to factor. 
