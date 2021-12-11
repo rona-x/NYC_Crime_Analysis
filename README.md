@@ -1,6 +1,6 @@
 ### Project description
 
-In this project, we aim to
+In this project, we aim to analyze NYC crime events as well as hate crimes and provide the readers with static and interactive visualizations.
 
 **Link**: https://rona-x.github.io/NYC_Crime_Analysis/
 
