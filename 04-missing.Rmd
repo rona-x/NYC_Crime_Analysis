@@ -98,10 +98,10 @@ createNAplot <- function(data, percent = TRUE) {
 }
 ```
 
-```{r}
+```{r missing_pattern}
 createNAplot(NYPD,FALSE)
 ```
-```{r, fig.width=6,fig.height=3.5}
+```{r perform_missing, fig.width=6,fig.height=3.5}
 options(scipen = 200)
 NYPD %>% summarise_all(list(~is.na(.)))%>%
   pivot_longer(everything(),names_to = "variables", values_to="missing") %>%
