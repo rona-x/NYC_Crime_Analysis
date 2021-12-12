@@ -34,7 +34,7 @@ ggparcoord(dv36,columns = 2:25,groupColumn = "County",scale = "globalminmax")+
 - Queens has highest number of crime between 18 pm and 19 pm.
 - Staten Island has highest number of crime between 12pm and 13 pm. Staten Island has lowest number of crime in all time range.
 
-```{r}
+```{r Time1}
 plot21 <- ggplot(d5, aes(x= TimeRange)) +
 geom_bar(stat = 'count')+
 facet_grid(County ~level)+
@@ -56,7 +56,7 @@ plot21
 
 Crimes have similar shape between different county except Staten Island. We can see that misdemeanor level of crimes is the largest among three levels, felony,misdemeanor,violation. 
 
-```{r}
+```{r County1}
 library(tidyverse)
 library(Lock5withR)
 library(vcd)
