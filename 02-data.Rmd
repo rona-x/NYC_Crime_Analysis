@@ -2,7 +2,7 @@
 
 The following two data sets are both directly exported as CSV files from NYC Open Data. 
 
-## NYC Crime Data
+## Crime data
 
 It is a large data set which contains 35 columns and 7.38M rows. The problem with this data set lies in processing it ready for our analysis, since it might involve irrelevant information, missing values and unclear structure. 
 
@@ -10,7 +10,7 @@ It is a large data set which contains 35 columns and 7.38M rows. The problem wit
 
 *Collected by: Zhisen Cai*
 
-## NYC Hate Crime Data
+## Hate crime data
 
 This data set has 14 columns and 1,181 rows, which is a more manageable size compared to the previous one. The only problem with it is missing values. 
 

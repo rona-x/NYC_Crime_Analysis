@@ -16,6 +16,7 @@ d5$County[d5$County == 'BROOKLYN'] = 'BKLYN'
 d5$County[d5$County == 'MANHATTAN'] = 'MAN'
 d5$County[d5$County == 'STATEN ISLAND'] = 'SI'
 ```
+### Distributions of Crime Events in Different Time Ranges
 
 ```{r}
 dv36 <- d5 %>% group_by(County,TimeRange) %>% 
@@ -24,8 +25,9 @@ dv36 <- d5 %>% group_by(County,TimeRange) %>%
 
 ggparcoord(dv36,columns = 2:25,groupColumn = "County",scale = "globalminmax")+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
-  theme(legend.position="bottom")+
-    labs(x = "TimeRange",y= " Count")
+  theme(legend.position="right") +
+  scale_color_manual(name = "County", labels =c("Brooklyn","Bronx","Manhattan","Queens","Staten Island"),values = c("#ef476f","#ffd166","#06d6a0","#118ab2","#073b4c"))+
+  labs(x = "Time",y= " Count", title = "The Number of Crime Events in Different Time Ranges")
 ```
 - All county has lowest number of crime between 5am and 6 am 
 - Brooklyn has highest number of crime between 17 pm and 18pm. Brooklyn has largest number of crime in all time range.

@@ -1,6 +1,6 @@
 # Data transformation
 
-## NYC Crime Data 
+## Crime data 
 
 ### Variable Selection 
 To begin with, we selected the data from Year 2020 for the further analysis. Then, we took out observations associated with the suspect's information, since this project is more focus on the victim's perspective. We also eliminated police abbreviations and codes to make this report reader-friendly. 
@@ -26,10 +26,10 @@ To begin with, we selected the data from Year 2020 for the further analysis. The
 
 This cleaning process reduced the size of the original data set significantly and made analysis more efficient. 
 
-## NYC Hate Crime Data 
+## Hate crime data
 
 ### Variable Selection 
-For this relatively small and neat data set, we only took out a few features, including police terminology and arrest ID. What is more, we eliminated arrest date, due to the fact that.......... 
+For this relatively small and neat data set, we only took out a few features, including police terminology, arrest date and arrest ID. 
 
 
 #### Selected Variables 
