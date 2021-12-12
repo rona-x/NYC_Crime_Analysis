@@ -17,7 +17,19 @@ d5$County[d5$County == 'MANHATTAN'] = 'MAN'
 d5$County[d5$County == 'STATEN ISLAND'] = 'SI'
 ```
 
-```{r}
+```{r map1}
+library(leaflet) 
+library(leaflet.extras)
+dm4 <- d5[d5$Location=='STREET',]
+options(repr.plot.width=8, repr.plot.height=8)
+m4 <- dm4 %>% leaflet() %>% addTiles() %>% 
+  addProviderTiles(providers$CartoDB.DarkMatter) %>% 
+  addWebGLHeatmap(lng=dm4$Longitude, lat=dm4$Latitude, size = 250)
+m4
+```
+
+
+```{r Time1}
 dv36 <- d5 %>% group_by(County,TimeRange) %>% 
                summarize(Total = n()) %>%
                pivot_wider(names_from = TimeRange, values_from = Total)
@@ -25,7 +37,9 @@ dv36 <- d5 %>% group_by(County,TimeRange) %>%
 ggparcoord(dv36,columns = 2:25,groupColumn = "County",scale = "globalminmax")+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
   theme(legend.position="bottom")+
-    labs(x = "TimeRange",y= " Count")
+  labs(x = "TimeRange",y= " Count")+
+  ggtitle("Total Number of Crimes in Different Time Range of Different County ")+
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 - All county has lowest number of crime between 5am and 6 am 
 - Brooklyn has highest number of crime between 17 pm and 18pm. Brooklyn has largest number of crime in all time range.
@@ -34,10 +48,10 @@ ggparcoord(dv36,columns = 2:25,groupColumn = "County",scale = "globalminmax")+
 - Queens has highest number of crime between 18 pm and 19 pm.
 - Staten Island has highest number of crime between 12pm and 13 pm. Staten Island has lowest number of crime in all time range.
 
-```{r Time1}
+```{r Time2}
 plot21 <- ggplot(d5, aes(x= TimeRange)) +
-geom_bar(stat = 'count')+
-facet_grid(County ~level)+
+geom_bar(stat = 'count',fill = "steelblue")+
+facet_grid(~level)+
 theme_classic()+
 scale_color_viridis(discrete = TRUE, option = "D")+
 scale_fill_viridis(discrete = TRUE)+
@@ -56,7 +70,7 @@ plot21
 
 Crimes have similar shape between different county except Staten Island. We can see that misdemeanor level of crimes is the largest among three levels, felony,misdemeanor,violation. 
 
-```{r County1}
+```{r County1, fig.width=5,fig.height=10}
 library(tidyverse)
 library(Lock5withR)
 library(vcd)
@@ -71,7 +85,7 @@ mosaic(level ~ County, direction=c("v","h"),dv13)
 
 In Brooklyn, Manhattan, Bronx and Queens,Brooklyn have the largest number of crimes in all level. Manhattan have lowest violation crimes. Bronx seems to have similar distribution of crimes as that of queens
 
-```{r}
+```{r County2}
 dv19 <- d5 %>% group_by(Location,level) %>% summarize(Total = n()) %>% arrange(desc(Total))
 dv20 <- d5 %>% group_by(Location) %>% summarize(TT = n())
 dv21 <- left_join(dv19,dv20,by = 'Location')
@@ -106,19 +120,15 @@ filter(Offense != 'Others' & Location != 'Others') %>%
 ggplot(mapping = aes(x = Location , y = Offense)) +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
 geom_tile(mapping = aes(fill = n))+
-scale_fill_gradient(low = "#DEEBF7", high = "#08306B")
+scale_fill_gradient(low = 'ivory2', high = 'purple4')+
+ggtitle("Offense VS Location")+
+theme(plot.title = element_text(hjust = 0.5))
+# DEEBF7
+#08306B
+
 ```
 
-```{r}
-library(leaflet) 
-library(leaflet.extras)
-dm4 <- d5[d5$Location=='STREET',]
-options(repr.plot.width=8, repr.plot.height=8)
-m4 <- dm4 %>% leaflet() %>% addTiles() %>% 
-  addProviderTiles(providers$CartoDB.DarkMatter) %>% 
-  addWebGLHeatmap(lng=dm4$Longitude, lat=dm4$Latitude, size = 250)
-m4
-```
+
 
 
 
@@ -126,41 +136,51 @@ m4
 d6 <- read_csv("data/Hate_Crimes.csv")
 names(d6) <- c("Year","Month","County","level","Offense","Bias")
 ```
-
-```{r}
-d6$Month = as.factor(d6$Month)
-dh2 <- d6 %>% group_by(Year,Month,level) %>% summarize(Total = n())
-ph2 <- ggplot(dh2, aes(x=Month , y= Total)) +
-facet_grid(level ~Year)+
-geom_bar(stat = 'identity')+
-theme_classic()+
-scale_color_viridis(discrete = TRUE, option = "D")+
-scale_fill_viridis(discrete = TRUE)+
-ggtitle('Total Hate Crime in Different Month')+
-theme(plot.title = element_text(hjust = 0.5))
-ph2
-```
-
 ```{r}
 dh3 <- d6 %>% group_by(County,Bias) %>% 
                summarize(Total = n()) %>%
                pivot_wider(names_from = Bias, values_from = Total)
 dh3[is.na(dh3)] = 0
-
 ggparcoord(dh3,columns = 2:24,groupColumn = "County",scale = "globalminmax")+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
   theme(legend.position="bottom")+
-    labs(x = "Bias",y= " Count")
+  labs(x = "Bias",y= " Count")+
+  ggtitle('Bias in Different County')+
+  theme(plot.title = element_text(hjust = 0.5))
+  
 ```
+
+
+Pick the top 5 bias in the whole area shown in the last graph and check the situation in each plot. It doesn't mean that these 5 bias should be the top 5 bias in each county.
+```{r}
+dh7 <- d6 %>% group_by(Bias) %>% 
+               summarize(Total = n()) %>%
+               arrange(desc(Total)) %>%
+               head(5)
+dh8 <- d6 %>% group_by(County,Bias) %>%
+              summarize(Total = n()) %>%
+              filter(Bias == "ANTI-ASIAN" | Bias == "ANTI-JEWISH" | Bias =="ANTI-MALE HOMOSEXUAL (GAY)" | Bias == 'ANTI-BLACK' | Bias == 'ANTI-WHITE' )
+```
+```{r BiasCounty1, fig.width=8,fig.height=8}
+ggplot(dh8, aes(x = Total, y = fct_reorder(Bias, Total))) +
+  geom_point(color = "blue") +
+  facet_wrap(~County,nrow =5, ncol=1)+
+  ggtitle("Top 5 Bias in Different County") +
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylab("") +
+  theme_linedraw()
+```
+
 ```{r}
 dh4 <- d6 %>% group_by(Offense,Bias) %>% 
                summarize(Total = n()) %>%
-               filter(Total > 20) %>%
+               filter(Bias == "ANTI-ASIAN" | Bias == "ANTI-JEWISH" | Bias =="ANTI-MALE HOMOSEXUAL (GAY)" | Bias == 'ANTI-BLACK' | Bias == 'ANTI-WHITE' )%>%
                pivot_wider(names_from = Offense, values_from = Total)
 dh4[is.na(dh4)] = 0
 parcoords(data =  dh4, rownames = FALSE, brushMode = "2d-axes-multi", reorderable = TRUE,queue = TRUE,,color = list(colorBy='Bias'), withD3 = TRUE)
 ```
 use if only exist one such that hate > 20
 Religion/Religious 是最大原因被hate的，其中anti jewish 是因此最被hate的， 其次因为race 和 color 被hate 的人也很多 因为race 和color 被hate最多的是 asian 和 black。第三多的是sexual orientation，被恨最多的是ANTI-MALE HOMOSEXUAL (GAY)
+
 
 
