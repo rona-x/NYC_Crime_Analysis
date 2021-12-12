@@ -1,38 +1,3 @@
 # Data transformation
 
 
-## NYC Crime Data
-
-To begin with, we selected the data from Year 2020 for the further analysis. Then, we decided to remove irrelevant variables. Since this project is more focus on the victim's perspective, we took out observations associated with the suspect's information. What is more, we eliminated police abbreviations and codes to make this report reader-friendly.
-Finally the variables we pick:
-CMPLNT_NUM: Exact Id for the reported event
-CMPLNT_FR_DT: Exact date of occurrence for the reported event (or starting date of occurrence, if CMPLNT_TO_DT exists) 
-CMPLNT_FR_TM: Exact time of occurrence for the reported event (or starting time of occurrence, if CMPLNT_TO_TM exists) 
-OFNS_DESC:Description of offense corresponding with key code 
-CRM_ATPT_CPTD_CD: Indicator of whether crime was successfully completed or attempted, but failed or was interrupted prematurely 
-LAW_CAT_CD: Level of offense: felony, misdemeanor, violation 
-BORO_NM: The name of the borough in which the incident occurred 
-PREM_TYP_DESC: Specific description of premises; grocery store, residence, street, etc. 
-VIC_Race: race of victim
-VIC_Sex : sex of victim
-Latitude: Latitude of the location where the crime took place
-Longitude: Longitude of the location where the crime took place
-
-steps of transformation
-- Format the CMPLNT_FR_DT, the date of the crime into month/date/Year
-- Pick the top 11 largest in OFNS_DESC. All the others values in OFNS_DESC considered as "Others" type.
-- Pick the top 14 largest in PREM_TYP_DESC.All the others values in PREM_TYP_DESC considered as "Others" type.
-- create a new column store the month of the crimes extracted from CMPLNT_FR_DT
-- create a mew column store the weekday of the crimes extracted form CMPLNT_FR_DT
-- We converted the exact time of crime occurrence from the HH:MM:SS format to an interval value defining a period of time in hours, which aids in modeling. 
-(such as 13:27 will be in the category [13,14]). There would be 24 levels in this variable
-This cleaning process reduced the size of the original data set significantly and made analysis more efficient.
-- Convert all the categorical data into factor 
-- rename all the columns. 
-
-
-## NYC Hate Crime Data
-
-For this relatively neat and small data set, we only took out a few features, including police terminology and arrest ID. We have columns "Full Complaint ID" ,"Complaint Year Number", "Month Number","Record Create Date" ,"Complaint Precinct Code", "Patrol Borough Name","County"  ,"Law Code Category Description", "Offense Description" , "PD Code Description" "Bias Motive Description", "Offense Category" ,"Arrest Date" and "Arrest Id". We only pick Complaint Year Number,Month Number,County,Law Code Category Description,Offense Category and Bias Motive Description.
-
-We change the column names into "Year","Month","County","level","Offense"and "Bias". Besides, we change all the categorical date to factor. 
