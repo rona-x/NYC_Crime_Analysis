@@ -47,25 +47,28 @@ createNAplot <- function(data, percent = TRUE) {
   summarize(freq = sum(Disappearences)) %>%
   ggplot(aes(x = fct_reorder(key, freq, .desc = TRUE), y=freq)) +
   geom_col(fill = "cornflowerblue", alpha = 0.7) +
+  ggtitle("Missing Value Pattern") +
   theme_bw() + 
   theme(panel.grid.major.x = element_blank(),panel.grid.minor.x = element_blank())+
   xlab(NULL)+
   theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1))
   if (percent == TRUE){
-    p1 <- p1 +  ylab("% rows missing:") 
-  } else { p1 <- p1 +  ylab("rows missing:") }
+    p1 <- p1 +  ylab(expression(paste("% rows \n missing:"))) 
+  } else { p1 <- p1 +  ylab(expression(paste("num rows \n missing:"))) }
   
   # plot missing values by pattern
   p2 <- ggplot(mp1, aes(y = fct_rev(missing_pattern), x = Total, alpha = complete)) +
-  geom_col(fill = 'blue') +
-  scale_alpha_manual(values = c(0.4,1), limits = c(FALSE,TRUE)) +
+  geom_col(fill = 'cornflowerblue') +
+  scale_alpha_manual(values = c(0.7,1), limits = c(FALSE,TRUE)) +
   theme_bw() +
+  theme(panel.grid.major.y = element_blank(),panel.grid.minor.y = element_blank())+
   theme(legend.position="none")+
+    theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1))+
   ylab(NULL)+
-  scale_x_continuous(breaks = c(0,100000,200000,300000,400000),labels = c(0,100,200,300,400))
+  scale_x_continuous(breaks = c(0,100000,200000,300000,400000),labels = c(0,"100K","200K","300K","400K"))
   if (percent == TRUE){
     p2 <- p2 +  xlab("% rows") 
-  } else { p2 <- p2 + xlab("row count (thousand)") }
+  } else { p2 <- p2 + xlab("row count") }
   
   # plot main plot
   xpos <- levels(fct_reorder(mp2$key, -mp2$Disappearences, sum))[ncol(missing_patterns)/2]
@@ -90,22 +93,23 @@ createNAplot <- function(data, percent = TRUE) {
   patchwork <- p1 + plot_spacer() + p3 + p2 + 
   plot_layout(widths = c(3, 1), heights = c(1, 3))
 
-  patchwork + plot_annotation(title = 'Missing Value Patterns',theme = theme(plot.title = element_text(hjust = 0.5)))
+  patchwork 
 
 }
 ```
+
 ```{r}
 createNAplot(NYPD,FALSE)
 ```
-```{r}
+```{r, fig.width=6,fig.height=3.5}
 options(scipen = 200)
 NYPD %>% summarise_all(list(~is.na(.)))%>%
   pivot_longer(everything(),names_to = "variables", values_to="missing") %>%
-  count(variables, missing) %>%
-  ggplot(aes(y=variables,x=n,fill=missing))+
+  count(variables, missing) %%
+  ggplot(aes(y=variables,x=nfill=missing))+
   geom_col()+
-  scale_x_continuous(breaks = c(0,100000,200000,300000,400000),labels = c(0,100,200,300,400))+
-  xlab('count (thousand)')
+  scale_x_continuous(breaks = c(0,100000,200000,300000,400000),labels = c(0,"100K","200K","300K","400K"))+
+  xlab('count')
 ```
 
 
