@@ -6,9 +6,13 @@ library(ggplot2)
 library(viridis)
 library(tidyverse)
 library(patchwork)
-```
-```{r}
 d4 <- read_csv("data/NYPD_His.csv")
+d4
+head(d4)
+```
+
+
+```{r}
 createNAplot <- function(data, percent = TRUE) {
   #find missing patterns
   missing_patterns <- data.frame(is.na(data)) %>%
@@ -79,7 +83,7 @@ createNAplot <- function(data, percent = TRUE) {
   patchwork <- p1 + plot_spacer() + p3 + p2 + 
   plot_layout(widths = c(3, 1), heights = c(1, 3))
 
-  patchwork + plot_annotation(title = 'Missing Value Patterns')
+  patchwork + plot_annotation(title = 'Missing Value Patterns')+ theme(plot.title = element_text(hjust = 0.5))
 
 }
 
@@ -87,6 +91,8 @@ createNAplot <- function(data, percent = TRUE) {
 ```{r}
 createNAplot(d4,FALSE)
 ```
+
+
 
 ```{r}
 options(scipen = 200)
