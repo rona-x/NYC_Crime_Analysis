@@ -1,1 +1,111 @@
 # Missing values
+
+
+```{r}
+library(dplyr)
+library(stringr)
+library(tidyr)
+library(readr)
+library(lubridate)
+library(ggplot2)
+library(knitr)
+library(lubridate)
+library(readr)
+library(patchwork)
+NYPD <- read_csv("data/NYPD.csv")
+```
+
+```{r}
+library(patchwork)
+library(tidyverse)
+createNAplot <- function(data, percent = TRUE) {
+  #find missing patterns
+  missing_patterns <- data.frame(is.na(data)) %>%
+  group_by_all() %>%
+  count(name = "Total", sort = TRUE) %>%
+  ungroup() 
+  
+  # prepare the data
+  if (percent == TRUE) { 
+    missing_patterns <- missing_patterns %>%
+      mutate(Total = (Total / sum(Total)) *100) 
+  }
+  
+  mp1 <- missing_patterns %>%
+  mutate(complete = ifelse(rowSums(.[1:ncol(missing_patterns)-1]) == 0, TRUE, FALSE))%>%
+  rownames_to_column("missing_pattern")
+  
+  mp2 <-  mp1%>%
+  gather(key, value, -missing_pattern, -Total, -complete) %>%
+  mutate(Disappearences = ifelse(value == TRUE, Total, 0))
+    
+  mp2$missing_pattern <- as.factor(mp2$missing_pattern)
+  
+  # plot missing values by variable
+  p1 <- mp2 %>%
+  group_by(key) %>%
+  summarize(freq = sum(Disappearences)) %>%
+  ggplot(aes(x = fct_reorder(key, freq, .desc = TRUE), y=freq)) +
+  geom_col(fill = "cornflowerblue", alpha = 0.7) +
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(),panel.grid.minor.x = element_blank())+
+  xlab(NULL)+
+  theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1))
+  if (percent == TRUE){
+    p1 <- p1 +  ylab("% rows missing:") 
+  } else { p1 <- p1 +  ylab("rows missing:") }
+  
+  # plot missing values by pattern
+  p2 <- ggplot(mp1, aes(y = fct_rev(missing_pattern), x = Total, alpha = complete)) +
+  geom_col(fill = 'blue') +
+  scale_alpha_manual(values = c(0.4,1), limits = c(FALSE,TRUE)) +
+  theme_bw() +
+  theme(legend.position="none")+
+  ylab(NULL)+
+  scale_x_continuous(breaks = c(0,100000,200000,300000,400000),labels = c(0,100,200,300,400))
+  if (percent == TRUE){
+    p2 <- p2 +  xlab("% rows") 
+  } else { p2 <- p2 + xlab("row count (thousand)") }
+  
+  # plot main plot
+  xpos <- levels(fct_reorder(mp2$key, -mp2$Disappearences, sum))[ncol(missing_patterns)/2]
+  ypos <- mp2 %>%
+    filter(complete == TRUE) %>%
+    select(missing_pattern) %>%
+    distinct(.) %>%
+    simplify(.)
+  
+  p3 <- ggplot(mp2, aes(x = fct_reorder(key, -Disappearences, sum), y = fct_rev(missing_pattern), fill = value, alpha = complete)) +
+  geom_tile(color = "white") +
+  scale_fill_manual(values = c("grey", "mediumpurple")) +
+  scale_alpha_manual(values = c(0.7, 1),limits=c(FALSE,TRUE)) +
+  theme_classic() +
+  theme(legend.position="none")+
+  xlab(NULL) +
+  ylab("missing pattern")+
+  annotate("text", x= xpos, y=ypos, label = "complete case")+
+  theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1))
+  
+ # assemble plots
+  patchwork <- p1 + plot_spacer() + p3 + p2 + 
+  plot_layout(widths = c(3, 1), heights = c(1, 3))
+
+  patchwork + plot_annotation(title = 'Missing Value Patterns',theme = theme(plot.title = element_text(hjust = 0.5)))
+
+}
+```
+```{r}
+createNAplot(NYPD,FALSE)
+```
+```{r}
+options(scipen = 200)
+NYPD %>% summarise_all(list(~is.na(.)))%>%
+  pivot_longer(everything(),names_to = "variables", values_to="missing") %>%
+  count(variables, missing) %>%
+  ggplot(aes(y=variables,x=n,fill=missing))+
+  geom_col()+
+  scale_x_continuous(breaks = c(0,100000,200000,300000,400000),labels = c(0,100,200,300,400))+
+  xlab('count (thousand)')
+```
+
+
