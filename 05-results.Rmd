@@ -109,6 +109,18 @@ geom_tile(mapping = aes(fill = n))+
 scale_fill_gradient(low = "#DEEBF7", high = "#08306B")
 ```
 
+```{r}
+library(leaflet) 
+library(leaflet.extras)
+dm4 <- d5[d5$Location=='STREET',]
+options(repr.plot.width=8, repr.plot.height=8)
+m4 <- dm4 %>% leaflet() %>% addTiles() %>% 
+  addProviderTiles(providers$CartoDB.DarkMatter) %>% 
+  addWebGLHeatmap(lng=dm4$Longitude, lat=dm4$Latitude, size = 250)
+m4
+```
+
+
 
 ```{r}
 d6 <- read_csv("data/Hate_Crimes.csv")
