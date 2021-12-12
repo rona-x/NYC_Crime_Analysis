@@ -57,6 +57,7 @@ plot21
 Crimes have similar shape between different county except Staten Island. We can see that misdemeanor level of crimes is the largest among three levels, felony,misdemeanor,violation. 
 
 ```{r}
+library(tidyverse)
 library(Lock5withR)
 library(vcd)
 library(grid)
@@ -64,10 +65,10 @@ dv13 <- d5 %>%
   select(County,level) %>%
   group_by(County,level) %>%
   summarise(Freq=n()) %>%
-  mutate(level=fct_relevel(level, "VIOLATION","MISDEMEANOR","FELONY"))
+  mutate(level = fct_relevel(level, "VIOLATION","MISDEMEANOR","FELONY"))
 mosaic(level ~ County, direction=c("v","h"),dv13)
 ```
-Since the number of crimes in Staten Island is too small, we focus on Brooklyn,Manhattan, Bronx and Queens.
+
 In Brooklyn, Manhattan, Bronx and Queens,Brooklyn have the largest number of crimes in all level. Manhattan have lowest violation crimes. Bronx seems to have similar distribution of crimes as that of queens
 
 ```{r}
