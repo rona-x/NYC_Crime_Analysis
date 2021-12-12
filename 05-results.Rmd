@@ -17,7 +17,7 @@ d5$County[d5$County == 'MANHATTAN'] = 'MAN'
 d5$County[d5$County == 'STATEN ISLAND'] = 'SI'
 ```
 
-```{r map1}
+```{r mapF1}
 library(leaflet) 
 library(leaflet.extras)
 dm4 <- d5[d5$Location=='STREET',]
@@ -29,7 +29,7 @@ m4
 ```
 
 
-```{r Time1}
+```{r TimeRange1}
 dv36 <- d5 %>% group_by(County,TimeRange) %>% 
                summarize(Total = n()) %>%
                pivot_wider(names_from = TimeRange, values_from = Total)
@@ -48,7 +48,7 @@ ggparcoord(dv36,columns = 2:25,groupColumn = "County",scale = "globalminmax")+
 - Queens has highest number of crime between 18 pm and 19 pm.
 - Staten Island has highest number of crime between 12pm and 13 pm. Staten Island has lowest number of crime in all time range.
 
-```{r Time2}
+```{r TimeRange2}
 plot21 <- ggplot(d5, aes(x= TimeRange)) +
 geom_bar(stat = 'count',fill = "steelblue")+
 facet_grid(~level)+
@@ -70,7 +70,7 @@ plot21
 
 Crimes have similar shape between different county except Staten Island. We can see that misdemeanor level of crimes is the largest among three levels, felony,misdemeanor,violation. 
 
-```{r County1, fig.width=5,fig.height=10}
+```{r CountyC1, fig.width=5,fig.height=10}
 library(tidyverse)
 library(Lock5withR)
 library(vcd)
@@ -85,7 +85,7 @@ mosaic(level ~ County, direction=c("v","h"),dv13)
 
 In Brooklyn, Manhattan, Bronx and Queens,Brooklyn have the largest number of crimes in all level. Manhattan have lowest violation crimes. Bronx seems to have similar distribution of crimes as that of queens
 
-```{r County2}
+```{r CountyC2}
 dv19 <- d5 %>% group_by(Location,level) %>% summarize(Total = n()) %>% arrange(desc(Total))
 dv20 <- d5 %>% group_by(Location) %>% summarize(TT = n())
 dv21 <- left_join(dv19,dv20,by = 'Location')
@@ -161,7 +161,7 @@ dh8 <- d6 %>% group_by(County,Bias) %>%
               summarize(Total = n()) %>%
               filter(Bias == "ANTI-ASIAN" | Bias == "ANTI-JEWISH" | Bias =="ANTI-MALE HOMOSEXUAL (GAY)" | Bias == 'ANTI-BLACK' | Bias == 'ANTI-WHITE' )
 ```
-```{r BiasCounty1, fig.width=8,fig.height=8}
+```{r BiasCountyBC1, fig.width=8,fig.height=8}
 ggplot(dh8, aes(x = Total, y = fct_reorder(Bias, Total))) +
   geom_point(color = "blue") +
   facet_wrap(~County,nrow =5, ncol=1)+
