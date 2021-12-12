@@ -105,8 +105,8 @@ createNAplot(NYPD,FALSE)
 options(scipen = 200)
 NYPD %>% summarise_all(list(~is.na(.)))%>%
   pivot_longer(everything(),names_to = "variables", values_to="missing") %>%
-  count(variables, missing) %%
-  ggplot(aes(y=variables,x=nfill=missing))+
+  count(variables, missing) %>%
+  ggplot(aes(y=variables,x=n,fill=missing))+
   geom_col()+
   scale_x_continuous(breaks = c(0,100000,200000,300000,400000),labels = c(0,"100K","200K","300K","400K"))+
   xlab('count')
