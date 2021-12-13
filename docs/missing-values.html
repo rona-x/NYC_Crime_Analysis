@@ -24,7 +24,7 @@
 <meta name="author" content="Zhisen Cai &amp; Rona Xu" />
 
 
-<meta name="date" content="2021-12-12" />
+<meta name="date" content="2021-12-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -108,13 +108,15 @@
 <li class="chapter" data-level="3.2.1" data-path="data-transformation.html"><a href="data-transformation.html#variable-selection-1"><i class="fa fa-check"></i><b>3.2.1</b> Variable Selection</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#cirme-analysis"><i class="fa fa-check"></i><b>4.1</b> Cirme analysis</a></li>
-</ul></li>
+<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
 <ul>
-<li class="chapter" data-level="5.0.1" data-path="results.html"><a href="results.html#distributions-of-crime-events-in-different-time-ranges"><i class="fa fa-check"></i><b>5.0.1</b> Distributions of Crime Events in Different Time Ranges</a></li>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#cirme-analysis"><i class="fa fa-check"></i><b>5.1</b> Cirme Analysis</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#nyc-crime-map"><i class="fa fa-check"></i><b>5.1.1</b> NYC Crime Map</a></li>
+<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#distribution-of-crimes-by-time-range"><i class="fa fa-check"></i><b>5.1.2</b> Distribution of crimes by time range</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#hate-crime-analysis"><i class="fa fa-check"></i><b>5.2</b> Hate Crime Analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
@@ -139,12 +141,12 @@
             <section class="normal" id="section-">
 <div id="missing-values" class="section level1" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Missing values</h1>
-<div id="cirme-analysis" class="section level2" number="4.1">
-<h2><span class="header-section-number">4.1</span> Cirme analysis</h2>
-<p><img src="finalproj_files/figure-html/missing_pattern-1.png" width="672" />
-<img src="finalproj_files/figure-html/perform_missing-1.png" width="576" /></p>
+<p>Missing data would substantially affect the precision of the analysis and could lead to wrong prediction as well as conclusion. In this chapter, we examined the missing data in the two data sets. However, after data cleaning and transformation, there is no missing value in the hate crime data set. Consequently, we mainly focused on the missing values in the crime data set.</p>
+<p><img src="finalproj_files/figure-html/missing_pattern-1.png" width="672" /></p>
+<p>From the plot above, it is recognizable that most cases are complete, with no missing value. <em>Location</em>, <em>County</em> and <em>Offense</em> are the three most apparent missing features among 10. They have 1,104, 463 and 5 missing rows respectively. We took another step to analyze the significance of these missing variables and presented it in the following plot.</p>
+<p><img src="finalproj_files/figure-html/perform_missing-1.png" width="480" /></p>
+<p>In this large data set containing over 40K rows, the percentages of missing <em>Location</em> and <em>County</em> rows are both less than 0.3%, and <em>offense</em> is not even noticeable. In this way, we concluded that the existence of missing values in this data set does not have significant statistical power of producing biased results.</p>
 
-</div>
 </div>
             </section>
 

@@ -1,5 +1,5 @@
 # Results
-# Results
+## Cirme Analysis
 ```{r}
 library(readr)
 library(dplyr)
@@ -17,7 +17,8 @@ d5$County[d5$County == 'BROOKLYN'] = 'BKLYN'
 d5$County[d5$County == 'MANHATTAN'] = 'MAN'
 d5$County[d5$County == 'STATEN ISLAND'] = 'SI'
 ```
-
+### NYC Crime Map
+The distribution of crime events presented in this map provided us with a general idea that Manhattan, Bronx and Brooklyn have the highest crime rate among the five boroughs in NYC. 
 ```{r map1}
 library(leaflet) 
 library(leaflet.extras)
@@ -30,26 +31,27 @@ m4
 ```
 
 
+
+### Distribution of crimes by time range
+
 ```{r Time1}
 dv36 <- d5 %>% group_by(County,TimeRange) %>% 
                summarize(Total = n()) %>%
                pivot_wider(names_from = TimeRange, values_from = Total)
 
 ggparcoord(dv36,columns = 2:25,groupColumn = "County",scale = "globalminmax")+
+  theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
-  theme(legend.position="bottom")+
-  labs(x = "TimeRange",y= " Count")+
-  ggtitle("Total Number of Crimes in Different Time Range of Different County ")+
+  scale_color_manual(labels = c("Brooklyn","Bronx","Manhattan", "Queens","Staten Island"), values = c("#ef476f","#ffd166","#06d6a0","#118ab2","#073b4c")) +
+  theme(legend.position="right")+
+  labs(x = "Time Range",y= "Count")+
+  ggtitle("Number of Crimes by Borough and Time Range")+
   theme(plot.title = element_text(hjust = 0.5))
 ```
-- All county has lowest number of crime between 5am and 6 am 
-- Brooklyn has highest number of crime between 17 pm and 18pm. Brooklyn has largest number of crime in all time range.
-- Manhattan has highest number of crime between 16 pm and 17 pm.
-- Bronx has highest number of crime between 18 pm and 19 pm.
-- Queens has highest number of crime between 18 pm and 19 pm.
-- Staten Island has highest number of crime between 12pm and 13 pm. Staten Island has lowest number of crime in all time range.
 
-```{r Time2}
+In general, the number of crimes committed increases hourly from 6 a.m. through afternoon, peaks at 6 p.m., and then slowly drops to a low point at 6 a.m. Among the five boroughs, Brooklyn has the highest crime rate of all time, following by Manhattan and Bronx. Conversely, Staten Island has the lowest. 
+
+```{r, fig.width=8.5,fig.height=5}
 plot21 <- ggplot(d5, aes(x= TimeRange)) +
 geom_bar(stat = 'count',fill = "steelblue")+
 facet_grid(~level)+
@@ -62,29 +64,36 @@ scale_x_discrete(breaks = c("00-01","01-02","02-03","03-04","04-05","05-06","06-
                    labels = c("00-01","","02-03","","04-05","","06-07","",
                                   "08-09","","10-11","","12-13","","14-15","",
                                   "16-17","","18-19","","20-21","","22-23",""))+
-ggtitle('Total Crime in Each hour')+
+ggtitle('Number of Crimes by Level and Time Range')+
 theme(plot.title = element_text(hjust = 0.5))+
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
-theme(legend.position="none")
+theme(legend.position="none") +
+xlab("Time Range") +
+ylab("Count")
 plot21
 ```
 
-Crimes have similar shape between different county except Staten Island. We can see that misdemeanor level of crimes is the largest among three levels, felony,misdemeanor,violation. 
 
-```{r County1, fig.width=5,fig.height=10}
+The distribution of the number of crimes has a similar shape regardless of the level of offense across time periods. What is more, crimes categorized as misdemeanor are committed the most among those three levels. 
+
+
+```{r County1, fig.width=5,fig.height=5}
 library(tidyverse)
 library(Lock5withR)
 library(vcd)
 library(grid)
+library(RColorBrewer)
+
+colors1 <- brewer.pal(3,"Blues")
 dv13 <- d5 %>%
   select(County,level) %>%
   group_by(County,level) %>%
   summarise(Freq=n()) %>%
   mutate(level = fct_relevel(level, "VIOLATION","MISDEMEANOR","FELONY"))
-mosaic(level ~ County, direction=c("v","h"),dv13)
+mosaic(level ~ County, direction=c("v","h"),dv13,highlighting_fill = colors1)
 ```
 
-In Brooklyn, Manhattan, Bronx and Queens,Brooklyn have the largest number of crimes in all level. Manhattan have lowest violation crimes. Bronx seems to have similar distribution of crimes as that of queens
+Brooklyn has the largest number of crimes in all levels and Staten Island has the lowest. Manhattan has the smallest number of crimes defined as violation. Bronx seems to have a similar distribution of crimes as that of Queens.
 
 ```{r County2}
 dv19 <- d5 %>% group_by(Location,level) %>% summarize(Total = n()) %>% arrange(desc(Total))
@@ -92,14 +101,16 @@ dv20 <- d5 %>% group_by(Location) %>% summarize(TT = n())
 dv21 <- left_join(dv19,dv20,by = 'Location')
 plot16 <- ggplot(dv21, aes(y= reorder(Location,TT),Total, fill = level))+
 geom_bar(stat = "identity") + theme_minimal() +
-labs(x = "Count (thousand)",y= " Location",title = "Counting crimes in different level at different location")+
+labs(x = "Count",y= "Specific Location",title = "Number of Crimes by Location and Level")+
 theme(plot.title = element_text(hjust = 0.5))+
 theme_classic()+
 scale_color_viridis(discrete = TRUE, option = "D")+
 scale_fill_viridis(discrete = TRUE)+
-scale_x_continuous(breaks = c(0,25000,50000,75000,100000,125000),labels = c(0,25,50,75,100,125))
+scale_x_continuous(breaks = c(0,25000,50000,75000,100000,125000),labels = c(0,"25K","50K","75K","100K","125K"))
 plot16
 ```
+
+
 
 ```{r}
 dv22 <- d5 %>% filter(VIC_Sex == 'F' | VIC_Sex == "M")%>% group_by(Offense,VIC_Sex) %>% summarize(Total = n()) %>% arrange(desc(Total))
@@ -107,14 +118,19 @@ dv23 <- d5 %>% filter(VIC_Sex == 'F' | VIC_Sex == "M") %>% group_by(Offense) %>%
 dv24 <- left_join(dv22,dv23,by = 'Offense')
 plot17 <- ggplot(dv24, aes(y= reorder(Offense,TT),Total, fill = VIC_Sex))+
 geom_bar(stat = "identity") + theme_minimal() +
-labs(x = "Count (thousand)",y= " Offense",title = "Counting crimes on different sex in different crime")+
+labs(x = "Count",y= "Offense",title = "Number of Crimes by Category and Sex")+
 theme(plot.title = element_text(hjust = 0.5))+
 theme_classic()+
 scale_color_viridis(discrete = TRUE, option = "D")+
 scale_fill_viridis(discrete = TRUE)+
-scale_x_continuous(breaks = c(0,20000,40000,60000),labels = c(0,20,40,60))
+scale_x_continuous(breaks = c(0,20000,40000,60000),labels = c(0,"20K","40K","60K"))
 plot17
 ```
+
+
+
+
+
 ```{r}
 d5 %>% count(Location , Offense) %>% 
 filter(Offense != 'Others' & Location != 'Others') %>%
@@ -131,7 +147,7 @@ theme(plot.title = element_text(hjust = 0.5))
 
 
 
-
+## Hate Crime Analysis
 
 ```{r}
 d6 <- read_csv("data/Hate_Crimes.csv")
@@ -143,16 +159,19 @@ dh3 <- d6 %>% group_by(County,Bias) %>%
                pivot_wider(names_from = Bias, values_from = Total)
 dh3[is.na(dh3)] = 0
 ggparcoord(dh3,columns = 2:24,groupColumn = "County",scale = "globalminmax")+
+  theme_minimal() +
+  scale_color_manual(labels = c("Bronx","Kings","New York", "Queens","Richmond"), values = c("#ffd166","#ef476f","#06d6a0","#118ab2","#073b4c")) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
-  theme(legend.position="bottom")+
-  labs(x = "Bias",y= " Count")+
-  ggtitle('Bias in Different County')+
+  theme(legend.position="right")+
+  labs(x = "Bias Type",y= "Count")+
+  ggtitle('Count of Bias by Borough')+
   theme(plot.title = element_text(hjust = 0.5))
   
 ```
 
+Kings(Brooklyn) has the highest number of hate crime events in general, followed by New York(Manhattan) and Queens; Richmond(Staten Island) has the lowest. Among these bias motivations, Anti-Jewish appears to be the most common one. Moreover, from the perspective of hate crimes against sexual orientation, Anti-Male homosexual is the most severe one. In order to further examine it, we picked the top five bias motivations, including Anti-Jewish, Anti-Asian, Anti-Male homosexual, Anti-BLACK and Anti-White, and presented the number of motivations by borough in the following graph.
 
-Pick the top 5 bias in the whole area shown in the last graph and check the situation in each plot. It doesn't mean that these 5 bias should be the top 5 bias in each county.
+
 ```{r}
 dh7 <- d6 %>% group_by(Bias) %>% 
                summarize(Total = n()) %>%
@@ -162,15 +181,18 @@ dh8 <- d6 %>% group_by(County,Bias) %>%
               summarize(Total = n()) %>%
               filter(Bias == "ANTI-ASIAN" | Bias == "ANTI-JEWISH" | Bias =="ANTI-MALE HOMOSEXUAL (GAY)" | Bias == 'ANTI-BLACK' | Bias == 'ANTI-WHITE' )
 ```
-```{r BiasCounty1, fig.width=8,fig.height=8}
+```{r BiasCounty1, fig.width=8,fig.height=6}
 ggplot(dh8, aes(x = Total, y = fct_reorder(Bias, Total))) +
   geom_point(color = "blue") +
   facet_wrap(~County,nrow =5, ncol=1)+
-  ggtitle("Top 5 Bias in Different County") +
+  ggtitle("Number of Hate Crimes by Borough and Bias") +
   theme(plot.title = element_text(hjust = 0.5))+
   ylab("") +
-  theme_linedraw()
+  theme_linedraw() +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
+
+From this plot, it is apparent that Anti-Jewish hate crimes occurred the most in Kings. Anti-Asian, Anti-Male homosexual, Anti-Black and Anti-White hate crimes are all committed the most in New York. 
 
 ```{r}
 dh4 <- d6 %>% group_by(Offense,Bias) %>% 
@@ -180,5 +202,4 @@ dh4 <- d6 %>% group_by(Offense,Bias) %>%
 dh4[is.na(dh4)] = 0
 parcoords(data =  dh4, rownames = FALSE, brushMode = "2d-axes-multi", reorderable = TRUE,queue = TRUE,,color = list(colorBy='Bias'), withD3 = TRUE)
 ```
-use if only exist one such that hate > 20
-Religion/Religious 是最大原因被hate的，其中anti jewish 是因此最被hate的， 其次因为race 和 color 被hate 的人也很多 因为race 和color 被hate最多的是 asian 和 black。第三多的是sexual orientation，被恨最多的是ANTI-MALE HOMOSEXUAL (GAY)
+

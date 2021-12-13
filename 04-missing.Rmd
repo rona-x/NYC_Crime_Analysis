@@ -1,6 +1,7 @@
 # Missing values
 
-## Cirme analysis
+Missing data would substantially affect the precision of the analysis and could lead to wrong prediction as well as conclusion. In this chapter, we examined the missing data in the two data sets. However, after data cleaning and transformation, there is no missing value in the hate crime data set. Consequently, we mainly focused on the missing values in the crime data set. 
+
 
 ```{r}
 library(dplyr)
@@ -13,6 +14,7 @@ library(knitr)
 library(lubridate)
 library(readr)
 library(patchwork)
+library(naniar)
 NYPD <- read_csv("data/NYPD.csv")
 ```
 
@@ -102,15 +104,13 @@ createNAplot <- function(data, percent = TRUE) {
 ```{r missing_pattern}
 createNAplot(NYPD,FALSE)
 ```
-```{r perform_missing, fig.width=6,fig.height=3.5}
-options(scipen = 200)
-NYPD %>% summarise_all(list(~is.na(.)))%>%
-  pivot_longer(everything(),names_to = "variables", values_to="missing") %>%
-  count(variables, missing) %>%
-  ggplot(aes(y=variables,x=n,fill=missing))+
-  geom_col()+
-  scale_x_continuous(breaks = c(0,100000,200000,300000,400000),labels = c(0,"100K","200K","300K","400K"))+
-  xlab('count')
+
+From the plot above, it is recognizable that most cases are complete, with no missing value. *Location*, *County* and *Offense* are the three most apparent missing features among 10. They have 1,104, 463 and 5 missing rows respectively. We took another step to analyze the significance of these missing variables and presented it in the following plot. 
+
+
+```{r perform_missing, fig.width=5,fig.height=3.5}
+gg_miss_var(NYPD, show_pct = TRUE) + ggtitle("The Percentage of Missing Rows") + xlab("Percentage")
 ```
 
 
+In this large data set containing over 40K rows, the percentages of missing *Location* and *County* rows are both less than 0.3%, and *offense* is not even noticeable. In this way, we concluded that the existence of missing values in this data set does not have significant statistical power of producing biased results.

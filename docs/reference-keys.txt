@@ -11,8 +11,10 @@ hate-crime-data-1
 variable-selection-1
 selected-variables-1
 missing-values
-cirme-analysis
 results
-distributions-of-crime-events-in-different-time-ranges
+cirme-analysis
+nyc-crime-map
+distribution-of-crimes-by-time-range
+hate-crime-analysis
 interactive-component
 conclusion
