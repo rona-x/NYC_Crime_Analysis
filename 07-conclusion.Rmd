@@ -1,2 +1,11 @@
 # Conclusion
 
+Crime analysis is a relatively board topic, and we have encountered several obstacles in terms of narrowing the scope, utilizing visualization tools and generating a fair conclusion of the results.\
+
+First of all, it was a hard choice of selecting only a few features from dozens of variables. From the perspective of the data set itself, there is not much information about suspects that could be used to identify crime pattern explaining why people commit crimes in certain areas.\
+
+Moreover, we have learned a plenty of data visualization tools through this semester; however, we were torn between two or more of them when actually implementing them. We genuinely believe that this situation will be improved in the future as we practice more.\
+
+Last but not least, when summarizing the results of hate crime analysis, we realized that such sensitive subjects might make other individuals unconformable. \
+
+After completing this project, we have enhanced our ability of handling a large data set, gained more experience with other data visualization platforms, such as VizHub, and most importantly, a better understanding of the power of data visualization.
