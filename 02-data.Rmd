@@ -2,18 +2,18 @@
 
 The following two data sets are both directly exported as CSV files from NYC Open Data. 
 
-## Crime data
+## Index Crime dataset
 
-It is a large data set which contains 35 columns and 7.38M rows. The problem with this data set lies in processing it ready for our analysis, since it might involve irrelevant information, missing values and unclear structure. 
+It is a large data set which contains 35 columns and 7.38M rows. The problem with this data set lies in processing it ready for our analysis, since it might involve irrelevant information, missing values and unclear structures. 
 
-**Link:** https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Historic/qgea-i56i
+[Click here to view the dataset.](https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Historic/qgea-i56i)
 
 *Collected by: Zhisen Cai*
 
-## Hate crime data
+## Hate Crime dataset
 
-This data set has 14 columns and 1,181 rows, which is a more manageable size compared to the previous one. The only problem with it is missing values. 
+This data set has 14 columns and 1,181 rows, which is a much more manageable size compared to the previous one. The only problem with it is missing values. 
 
-**Link:** https://data.cityofnewyork.us/Public-Safety/NYPD-Hate-Crimes/bqiq-cu78
+[Click here to view the dataset.](https://data.cityofnewyork.us/Public-Safety/NYPD-Hate-Crimes/bqiq-cu78)
 
 *Collected by: Rona Xu*

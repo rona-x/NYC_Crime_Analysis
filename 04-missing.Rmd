@@ -1,6 +1,6 @@
 # Missing values
 
-Missing data would substantially affect the precision of the analysis and could lead to wrong prediction as well as conclusion. In this chapter, we examined the missing data in the two data sets. However, after data cleaning and transformation, there is no missing value in the hate crime data set. Consequently, we mainly focused on the missing values in the crime data set. 
+Missing data would substantially affect the precision of the analysis and could lead to wrong prediction as well as conclusion. In this chapter, we examined the missing data in the two data sets. However, after data cleaning and transformation, there is no missing value in the hate crime data set. Consequently, we mainly focused on the missing values in the index crime data set. 
 
 
 ```{r}
@@ -105,8 +105,9 @@ createNAplot <- function(data, percent = TRUE) {
 createNAplot(NYPD,FALSE)
 ```
 
-From the plot above, it is recognizable that most cases are complete, with no missing value. *Location*, *County* and *Offense* are the three most apparent missing features among 10. They have 1,104, 463 and 5 missing rows respectively. We took another step to analyze the significance of these missing variables and presented it in the following plot. 
-
+From the plot above, it is recognizable that most cases are complete, with no missing value. *Location*, *County* and *Offense* are the three most apparent missing features among 10. They have 1,104, 463 and 5 missing rows respectively. We took a further step to analyze the significance of these missing variables and presented it in the following plot. 
+\
+\
 
 ```{r perform_missing, fig.width=5,fig.height=3.5}
 gg_miss_var(NYPD, show_pct = TRUE) + ggtitle("The Percentage of Missing Rows") + xlab("Percentage")

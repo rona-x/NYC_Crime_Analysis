@@ -1,5 +1,5 @@
 # Results
-## Cirme Analysis
+## Index Cirme Analysis
 ```{r}
 library(readr)
 library(dplyr)
@@ -32,7 +32,7 @@ m4
 
 
 
-### Distribution of crimes by time range
+### Factor: Time Range
 
 ```{r Time1}
 dv36 <- d5 %>% group_by(County,TimeRange) %>% 
@@ -50,6 +50,8 @@ ggparcoord(dv36,columns = 2:25,groupColumn = "County",scale = "globalminmax")+
 ```
 
 In general, the number of crimes committed increases hourly from 6 a.m. through afternoon, peaks at 6 p.m., and then slowly drops to a low point at 6 a.m. Among the five boroughs, Brooklyn has the highest crime rate of all time, following by Manhattan and Bronx. Conversely, Staten Island has the lowest. 
+\
+\
 
 ```{r, fig.width=8.5,fig.height=5}
 plot21 <- ggplot(d5, aes(x= TimeRange)) +
@@ -74,9 +76,9 @@ plot21
 ```
 
 
-The distribution of the number of crimes has a similar shape regardless of the level of offense across time periods. What is more, crimes categorized as misdemeanor are committed the most among those three levels. 
+The distribution of the number of crimes has a similar shape regardless of the level of offense across time periods.
 
-
+### Factor: Level
 ```{r County1, fig.width=5,fig.height=5}
 library(tidyverse)
 library(Lock5withR)
@@ -93,7 +95,12 @@ dv13 <- d5 %>%
 mosaic(level ~ County, direction=c("v","h"),dv13,highlighting_fill = colors1)
 ```
 
-Brooklyn has the largest number of crimes in all levels and Staten Island has the lowest. Manhattan has the smallest number of crimes defined as violation. Bronx seems to have a similar distribution of crimes as that of Queens.
+Crimes categorized as misdemeanor are committed the most among those three levels. Other findings by borough:\
+$\circ$  Brooklyn has the highest crime rate in all categories, and Staten Island has the lowest. \
+$\circ$ Manhattan has the lowest crime rate of violation. \
+$\circ$ The distribution of crimes by level seems to be similar between Bronx and Queens.\
+
+### Factors: Location, Sex
 
 ```{r County2}
 dv19 <- d5 %>% group_by(Location,level) %>% summarize(Total = n()) %>% arrange(desc(Total))
@@ -110,25 +117,7 @@ scale_x_continuous(breaks = c(0,25000,50000,75000,100000,125000),labels = c(0,"2
 plot16
 ```
 
-
-
-```{r}
-dv22 <- d5 %>% filter(VIC_Sex == 'F' | VIC_Sex == "M")%>% group_by(Offense,VIC_Sex) %>% summarize(Total = n()) %>% arrange(desc(Total))
-dv23 <- d5 %>% filter(VIC_Sex == 'F' | VIC_Sex == "M") %>% group_by(Offense) %>% summarize(TT = n())
-dv24 <- left_join(dv22,dv23,by = 'Offense')
-plot17 <- ggplot(dv24, aes(y= reorder(Offense,TT),Total, fill = VIC_Sex))+
-geom_bar(stat = "identity") + theme_minimal() +
-labs(x = "Count",y= "Offense",title = "Number of Crimes by Category and Sex")+
-theme(plot.title = element_text(hjust = 0.5))+
-theme_classic()+
-scale_color_viridis(discrete = TRUE, option = "D")+
-scale_fill_viridis(discrete = TRUE)+
-scale_x_continuous(breaks = c(0,20000,40000,60000),labels = c(0,"20K","40K","60K"))
-plot17
-```
-
-
-
+Most crimes committed in NYC occurred on the street, followed by residential property and public property, namely Chain store and commercial building. When speaking of levels of crime, felonies and misdemeanors are most committed on the street, and violations happened the most in apartment house. 
 
 
 ```{r}
@@ -145,9 +134,34 @@ theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
+This heatmap exhibits the relationship between offense and location in a more detailed way. Harassment most happened in residence house, petit larceny and criminal mischief were committed most on the street. This plot also verified that street is the most common place that a crime took place. 
+\
+\
+
+```{r}
+dv22 <- d5 %>% filter(VIC_Sex == 'F' | VIC_Sex == "M")%>% group_by(Offense,VIC_Sex) %>% summarize(Total = n()) %>% arrange(desc(Total))
+dv23 <- d5 %>% filter(VIC_Sex == 'F' | VIC_Sex == "M") %>% group_by(Offense) %>% summarize(TT = n())
+dv24 <- left_join(dv22,dv23,by = 'Offense')
+plot17 <- ggplot(dv24, aes(y= reorder(Offense,TT),Total, fill = VIC_Sex))+
+geom_bar(stat = "identity") + theme_minimal() +
+labs(x = "Count",y= "Offense",title = "Number of Crimes by Category and Sex")+
+theme(plot.title = element_text(hjust = 0.5))+
+theme_classic()+
+scale_color_viridis(discrete = TRUE, option = "D")+
+scale_fill_viridis(discrete = TRUE)+
+scale_x_continuous(breaks = c(0,20000,40000,60000),labels = c(0,"20K","40K","60K"))
+plot17
+```
+
+Females have more harassment and assault experience than their male counterparts in 2020, which might be caused by gender inequality and female objectification.\
+
+Another interesting finding is that petit larceny, a theft of property that has a relatively low value, happened to men more often. From our perspective, the possible reason might lie in the fact that most men are not used to bring a bag to carry possessions when going out.  
+
 
 
 ## Hate Crime Analysis
+
+### Factors: Bias, Borough
 
 ```{r}
 d6 <- read_csv("data/Hate_Crimes.csv")
@@ -169,7 +183,9 @@ ggparcoord(dh3,columns = 2:24,groupColumn = "County",scale = "globalminmax")+
   
 ```
 
-Kings(Brooklyn) has the highest number of hate crime events in general, followed by New York(Manhattan) and Queens; Richmond(Staten Island) has the lowest. Among these bias motivations, Anti-Jewish appears to be the most common one. Moreover, from the perspective of hate crimes against sexual orientation, Anti-Male homosexual is the most severe one. In order to further examine it, we picked the top five bias motivations, including Anti-Jewish, Anti-Asian, Anti-Male homosexual, Anti-BLACK and Anti-White, and presented the number of motivations by borough in the following graph.
+Kings(Brooklyn) has the highest number of hate crime events in general, followed by New York(Manhattan) and Queens; Richmond(Staten Island) has the lowest. Among these bias motivations, Anti-Jewish appears to be the most common one. \
+
+In order to further examine it, we picked the top five bias motivations, including Anti-Jewish, Anti-Asian, Anti-Male homosexual, Anti-Black and Anti-White, and presented the number of motivations by borough in the following graph.
 
 
 ```{r}
@@ -193,6 +209,8 @@ ggplot(dh8, aes(x = Total, y = fct_reorder(Bias, Total))) +
 ```
 
 From this plot, it is apparent that Anti-Jewish hate crimes occurred the most in Kings. Anti-Asian, Anti-Male homosexual, Anti-Black and Anti-White hate crimes are all committed the most in New York. 
+\
+\
 
 ```{r}
 dh4 <- d6 %>% group_by(Offense,Bias) %>% 
@@ -203,3 +221,6 @@ dh4[is.na(dh4)] = 0
 parcoords(data =  dh4, rownames = FALSE, brushMode = "2d-axes-multi", reorderable = TRUE,queue = TRUE,,color = list(colorBy='Bias'), withD3 = TRUE)
 ```
 
+Most hate crime events were motivated by bias against race/color, religion/religious practice and sexual orientation. \
+
+In addition, Jewish is the most targeted religion group; Asian is the most targeted race, and Male-homosexual is the most targeted sexual orientation by hate crimes. 

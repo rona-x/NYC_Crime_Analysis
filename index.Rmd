@@ -7,3 +7,8 @@ site: bookdown::bookdown_site
 
 # Introduction
 
+Safety is a crucial part of life that individuals sometimes overlooked until it costs actual damage or discomfort. The safety problem of New York City, one the most famous cities in the world, has been a focus of discussion over the past decades. These discussions include but are not limited to topics about the most dangerous borough, sex differences in crime and racial discrimination. \
+
+From a vast amount of crime news and articles, it is also noticeable that the number of hate crimes has a sharp increase in recent times. This project aims to analyze both typical criminal offenses and hate crime events in NYC from 2019 to 2021 and provide static and interactive visualizations to exhibit the results. \
+
+*Note: We have divided criminal acts into two primary categories: Index Crime, a term defined by the FBI, including murder, rape, robbery, etc. and Hate Crime in the following chapters.*

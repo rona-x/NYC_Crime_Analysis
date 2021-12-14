@@ -1,12 +1,12 @@
 # Data transformation
 
-## Crime data 
+## Index Crime dataset
 
 ### Variable Selection 
-To begin with, we selected the data in 2020 for the further analysis. Then, we took out observations associated with the suspect's information, since this project is more focus on the victim's perspective. We also eliminated police abbreviations and codes to make this report reader-friendly. 
+Due to size of the original data set, we only selected the data in 2020 for the further analysis. After that, we took out observations associated with the suspect's information, since this project is more focus on the victim's perspective. We also eliminated police abbreviations and codes to make this report reader-friendly. 
 
 #### Selected Variables 
-- Id for the reported event 
+- ID for the reported event 
 - Exact date and time of crime event 
 - Description of offense: burglary, forgery, robbery, etc. 
 - Crime status: completed or attempted 
@@ -24,9 +24,9 @@ To begin with, we selected the data in 2020 for the further analysis. Then, we t
 - Added a new weekday column 
 - Converted the exact time of crime occurrence from the HH:MM:SS format to an interval value defining a period of time in hours 
 
-This cleaning process reduced the size of the original data set significantly and made analysis more efficient. 
+This cleaning process reduced the size of the original data set significantly and made the analysis more efficient. 
 
-## Hate crime data
+## Hate Crime dataset
 
 ### Variable Selection 
 For this relatively small and neat data set, we only took out a few features, including police terminology, arrest date and arrest ID.
@@ -35,7 +35,7 @@ For this relatively small and neat data set, we only took out a few features, in
 #### Selected Variables 
 - Year of the complaint 
 - Month of the complaint 
-- County name 
+- Borough name 
 - Level of offense 
 - Offense category: race, gender, religion, etc. 
 - Bias motive description: Anti-Asian, Anti-Transgender, Anti-Muslim, etc.
